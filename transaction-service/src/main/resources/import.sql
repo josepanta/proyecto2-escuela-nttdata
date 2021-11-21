@@ -22,3 +22,12 @@ INSERT INTO transaction (amount,type_Transaction,account_Id) VALUES (200,'DEPOSI
 INSERT INTO transaction (amount,type_Transaction,account_Id) VALUES (100,'DEPOSITE',4);
 INSERT INTO transaction (amount,type_Transaction,account_Id) VALUES (200,'DEPOSITE',3);
 INSERT INTO transaction (amount,type_Transaction,account_Id) VALUES (70,'WITHDRAW',1);
+
+
+--Charges
+INSERT INTO charge (amount,description,account_Id) VALUES (3752,'Pago de pizza',1);
+INSERT INTO charge (amount,description,account_Id) VALUES (4457,'Pago de Luz',1);
+INSERT INTO charge (amount,description,account_Id) VALUES (1568,'Pago de Agua',2);
+INSERT INTO charge (amount,description,account_Id) VALUES (1988,'Pago de Internet',2);
+INSERT INTO charge (amount,description,account_Id) VALUES (50,'Pago de voleto de avión',3);
+INSERT INTO charge (amount,description,account_Id) VALUES (156,'Pago de hamburguesas',1);
