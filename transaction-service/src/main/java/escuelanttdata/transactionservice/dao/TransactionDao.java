@@ -10,6 +10,6 @@ import java.util.List;
 public interface TransactionDao extends CrudRepository<Transaction,Integer> {
 
     //@Query("select t from Transaction t where t.accountId=:accountId")
-    List<Transaction> findTransactionByAccountId(@PathVariable Integer accountId);
+    List<Transaction> findTransactionByProductId(@PathVariable Integer productId);
 
 }

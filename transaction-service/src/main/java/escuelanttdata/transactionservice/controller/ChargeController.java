@@ -21,6 +21,6 @@ public class ChargeController {
 
     @GetMapping("/charge/account/{id}")
     public List<Charge> getTransactionByAccountId(@PathVariable Integer id){
-        return chargeService.getChargeByAccountId(id);
+        return chargeService.getChargeByProductId(id);
     }
 }

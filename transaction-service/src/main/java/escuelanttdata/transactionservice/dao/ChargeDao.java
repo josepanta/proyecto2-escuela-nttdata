@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ChargeDao extends CrudRepository<Charge,Integer> {
 
-    List<Charge> getChargeByAccountId(@PathVariable Integer accountId);
+    List<Charge> getChargeByProductId(@PathVariable Integer productId);
 }

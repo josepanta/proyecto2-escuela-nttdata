@@ -19,9 +19,9 @@ public class TransactionServiceImpl implements  TransactionService{
     }
 
     @Override
-    public List<Transaction> getTransactionByAccountId(Integer accoundId) {
+    public List<Transaction> getTransactionByProductId(Integer accoundId) {
         List<Transaction> transactionList = new ArrayList<>();
-        transactionDao.findTransactionByAccountId(accoundId).forEach(transaction -> transactionList.add(transaction));
+        transactionDao.findTransactionByProductId(accoundId).forEach(transaction -> transactionList.add(transaction));
         return transactionList;
     }
 

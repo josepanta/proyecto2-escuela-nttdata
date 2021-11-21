@@ -20,7 +20,7 @@ public class PaymentController {
 
     @GetMapping("/payment/account/{id}")
     public List<Payment> getPaymentByAccountId(@PathVariable Integer id){
-        return paymentService.getPaymentByAccountId(id);
+        return paymentService.getPaymentByProductId(id);
     }
 
 }

@@ -8,5 +8,5 @@ public interface ChargeService {
 
     void save(Charge charge);
 
-    List<Charge> getChargeByAccountId(Integer id);
+    List<Charge> getChargeByProductId(Integer id);
 }

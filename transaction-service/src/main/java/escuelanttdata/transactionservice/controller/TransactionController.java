@@ -22,18 +22,18 @@ public class TransactionController {
     }
 
     @PostMapping("/savetransaction/{amount}/{typeTransaction}/{accountId}")
-    public void saveTransactionForParam(@Valid @PathVariable BigDecimal amount,@Valid  @PathVariable String typeTransaction,@Valid @PathVariable Integer accountId){
+    public void saveTransactionForParam(@Valid @PathVariable BigDecimal amount,@Valid  @PathVariable String typeTransaction,@Valid @PathVariable Integer productId){
         transactionService.save(Transaction.builder()
                 .amount(amount)
                 .dateTime(new Date())
                 .typeTransaction(typeTransaction)
-                .accountId(accountId)
+                .productId(productId)
                 .build());
     }
 
     @GetMapping("/transaction/account/{id}")
     public List<Transaction> getTransactionByAccountId(@PathVariable Integer id){
-        return transactionService.getTransactionByAccountId(id);
+        return transactionService.getTransactionByProductId(id);
     }
 
 

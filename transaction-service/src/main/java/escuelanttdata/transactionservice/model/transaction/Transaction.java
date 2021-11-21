@@ -32,7 +32,7 @@ public class Transaction {
     @Column(name = "dateTime")
     private Date dateTime;
 
-    @Column(name = "accountId")
+    @Column(name = "productId")
     @NotNull(message = "the accountId not null")
-    private Integer accountId;
+    private Integer productId;
 }

@@ -8,6 +8,6 @@ public interface TransactionService {
 
     void save(Transaction transaction);
 
-    List<Transaction> getTransactionByAccountId(Integer id);
+    List<Transaction> getTransactionByProductId(Integer id);
 
 }

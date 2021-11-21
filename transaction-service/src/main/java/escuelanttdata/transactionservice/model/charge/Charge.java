@@ -34,7 +34,7 @@ public class Charge {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "accountId")
-    private Integer accountId;
+    @Column(name = "productId")
+    private Integer productId;
 
 }

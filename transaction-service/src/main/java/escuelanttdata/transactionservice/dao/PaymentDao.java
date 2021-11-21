@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface PaymentDao extends CrudRepository<Payment,Integer> {
 
-    List<Payment> getPaymentByAccountId(@PathVariable Integer accountId);
+    List<Payment> getPaymentByProductId(@PathVariable Integer productId);
 }

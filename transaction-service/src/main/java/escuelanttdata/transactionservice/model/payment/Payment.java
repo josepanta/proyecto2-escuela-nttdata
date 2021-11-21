@@ -31,7 +31,7 @@ public class Payment {
     @Column(name = "dateUpdate")
     private Date dateUpdate;
 
-    @Column(name = "accountId")
-    private Integer accountId;
+    @Column(name = "productId")
+    private Integer productId;
 
 }

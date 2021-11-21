@@ -8,5 +8,5 @@ public interface PaymentService {
 
    void save(Payment payment);
 
-   List<Payment> getPaymentByAccountId(Integer id);
+   List<Payment> getPaymentByProductId(Integer id);
 }

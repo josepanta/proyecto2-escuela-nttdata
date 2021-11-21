@@ -20,9 +20,9 @@ public class ChargeServiceImpl implements  ChargeService{
     }
 
     @Override
-    public List<Charge> getChargeByAccountId(Integer id) {
+    public List<Charge> getChargeByProductId(Integer id) {
         List<Charge> chargeList = new ArrayList<>();
-        chargeDao.getChargeByAccountId(id).forEach(charge -> chargeList.add(charge));
+        chargeDao.getChargeByProductId(id).forEach(charge -> chargeList.add(charge));
         return chargeList;
     }
 }

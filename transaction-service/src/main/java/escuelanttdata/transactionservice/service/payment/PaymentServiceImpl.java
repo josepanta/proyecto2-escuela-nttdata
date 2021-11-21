@@ -22,9 +22,9 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    public List<Payment> getPaymentByAccountId(Integer id) {
+    public List<Payment> getPaymentByProductId(Integer id) {
        List<Payment> paymentList = new ArrayList<>();
-        paymentDao.getPaymentByAccountId(id).forEach(payment -> paymentList.add(payment));
+        paymentDao.getPaymentByProductId(id).forEach(payment -> paymentList.add(payment));
         return  paymentList;
     }
 }
