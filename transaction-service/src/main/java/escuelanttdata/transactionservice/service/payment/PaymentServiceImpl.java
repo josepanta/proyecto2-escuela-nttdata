@@ -1,7 +1,7 @@
-package escuelanttdata.transactionservice.service;
+package escuelanttdata.transactionservice.service.payment;
 
 import escuelanttdata.transactionservice.dao.PaymentDao;
-import escuelanttdata.transactionservice.model.Payment;
+import escuelanttdata.transactionservice.model.payment.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,8 @@
-package escuelanttdata.transactionservice.model;
+package escuelanttdata.transactionservice.model.payment;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,9 +23,11 @@ public class Payment {
     @Column(name = "amount")
     private BigDecimal amount;
 
+    @CreationTimestamp
     @Column(name = "dateCreate")
     private Date dateCreate;
 
+    @CreationTimestamp
     @Column(name = "dateUpdate")
     private Date dateUpdate;
 
