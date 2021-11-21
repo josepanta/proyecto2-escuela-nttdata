@@ -23,9 +23,5 @@ public class TransactionController {
         return transactionService.getTransactionByAccountId(id);
     }
 
-    @GetMapping("/welcome/{name}")
-    public String Pedido(@PathVariable String name){
-        return "welcome "+name;
-    }
 
 }
