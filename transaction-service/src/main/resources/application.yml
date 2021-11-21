@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: transaction-category
+    name: service-transaction
 
   #config.import: optional:configserver:http://localhost:8888
 
