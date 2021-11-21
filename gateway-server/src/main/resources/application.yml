@@ -2,11 +2,11 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: service-category
-          uri: lb://service-category
+        - id: service-transaction
+          uri: lb://service-transaction
           predicates:
-            - Path=/api/app-category/**
-            - Header=token
+            - Path=/api/app-transaction/**
+            #- Header=token
             - Method=GET,POST
           filters:
             - StripPrefix=2
