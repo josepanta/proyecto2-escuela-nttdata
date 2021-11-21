@@ -5,17 +5,26 @@ spring:
         - id: service-transaction
           uri: lb://service-transaction
           predicates:
-            - Path=/api/app-transaction/**
-            #- Header=token
+            - Path=/api-transaction/**
+            - Header=token
             - Method=GET,POST
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
 
         - id: service-product
           uri: lb://service-product
           predicates:
-            - Path=/api/app-product/**
+            - Path=/api-product/**
+            - Header=token
+            - Method=GET,POST,PUT,DELETE
           filters:
-            - StripPrefix=2
-            - AddResponseHeader=dato-adicional,123
-            - AddRequestHeader=dato-adicional-request,456
+            - StripPrefix=1
+
+        - id: service-client
+            uri: lb://service-client
+            predicates:
+              - Path=/api-client/**
+              - Header=token
+              - Method=GET,POST,PUT,DELETE
+            filters:
+              - StripPrefix=1
