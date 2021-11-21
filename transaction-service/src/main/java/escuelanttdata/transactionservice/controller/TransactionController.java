@@ -5,6 +5,9 @@ import escuelanttdata.transactionservice.service.transaction.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -16,6 +19,16 @@ public class TransactionController {
     @PostMapping("/transaction")
     public void saveTransaction(@RequestBody Transaction transaction){
         transactionService.save(transaction);
+    }
+
+    @PostMapping("/savetransaction/{amount}/{typeTransaction}/{accountId}")
+    public void saveTransactionForParam(@Valid @PathVariable BigDecimal amount,@Valid  @PathVariable String typeTransaction,@Valid @PathVariable Integer accountId){
+        transactionService.save(Transaction.builder()
+                .amount(amount)
+                .dateTime(new Date())
+                .typeTransaction(typeTransaction)
+                .accountId(accountId)
+                .build());
     }
 
     @GetMapping("/transaction/account/{id}")
