@@ -31,7 +31,7 @@ public class TransactionController {
                 .build());
     }
 
-    @GetMapping("/transaction/account/{id}")
+    @GetMapping("/transaction/product/{id}")
     public List<Transaction> getTransactionByAccountId(@PathVariable Integer id){
         return transactionService.getTransactionByProductId(id);
     }

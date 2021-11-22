@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ProductClient {
 
     @GetMapping("/product/{id}")
-    Product getProductById(@PathVariable Integer id);
+    Product getById(@PathVariable Integer id);
 
     @PatchMapping("/product")
     void updateProduct(@PathVariable Product product);

@@ -22,7 +22,7 @@ public class TransactionServiceImpl implements  TransactionService{
     @Override
     public void save(Transaction transaction) {
         Product product;
-        product=productClient.getProductById(transaction.getProductId());
+        product=productClient.getById(transaction.getProductId());
         if(transaction.getTypeTransaction().equals("DEPOSIT")){
             product.setBalance(product.getBalance().add(transaction.getAmount()));
             productClient.updateProduct(product);
