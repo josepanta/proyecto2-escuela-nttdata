@@ -12,11 +12,12 @@ import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements  TransactionService{
-    @Autowired
-    TransactionDao transactionDao;
 
     @Autowired
     ProductClient productClient;
+
+    @Autowired
+    TransactionDao transactionDao;
 
     @Override
     public void save(Transaction transaction) {
@@ -30,6 +31,7 @@ public class TransactionServiceImpl implements  TransactionService{
             productClient.updateProduct(product);
         }
         transactionDao.save(transaction);
+
     }
 
     @Override
