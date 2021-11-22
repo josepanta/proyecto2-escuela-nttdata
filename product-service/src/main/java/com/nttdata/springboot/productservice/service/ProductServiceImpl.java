@@ -32,4 +32,11 @@ public class ProductServiceImpl implements ProductService{
     public void deleteById(Integer id) {
         productRepository.deleteById(id);
     }
+
+    @Override
+    public void updateBalance(Product product) {
+        Product productDB = productRepository.getById(product.getId());
+        productDB.setBalance(product.getBalance());
+        productRepository.save(productDB);
+    }
 }

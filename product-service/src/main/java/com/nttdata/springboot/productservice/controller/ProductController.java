@@ -32,4 +32,9 @@ public class ProductController {
     public void delete(@PathVariable Integer id){
         productService.deleteById(id);
     }
+
+    @PutMapping("/product")
+    public void update(Product product){
+        productService.save(product);
+    }
 }

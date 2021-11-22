@@ -13,4 +13,6 @@ public interface ProductService {
 
     void deleteById(Integer id);
 
+    void updateBalance(Product product);
+
 }
