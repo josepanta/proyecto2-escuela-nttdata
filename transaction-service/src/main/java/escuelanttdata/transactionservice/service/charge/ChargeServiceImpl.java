@@ -2,6 +2,7 @@ package escuelanttdata.transactionservice.service.charge;
 
 import escuelanttdata.transactionservice.client.ProductClient;
 import escuelanttdata.transactionservice.client.model.Product;
+import escuelanttdata.transactionservice.client.model.TypeProduct;
 import escuelanttdata.transactionservice.dao.ChargeDao;
 import escuelanttdata.transactionservice.model.charge.Charge;
 import escuelanttdata.transactionservice.model.transaction.TypeTransaction;
@@ -25,10 +26,20 @@ public class ChargeServiceImpl implements  ChargeService{
     public void save(Charge charge) {
 
         Product product;
+        String nameProductType;
         product=productClient.getById(charge.getProductId());
-        product.setBalance(product.getBalance().subtract(charge.getAmount()));
-        productClient.updateProduct(product);
-        chargeDao.save(charge);
+        nameProductType=product.getProductType().getName();
+
+        Optional<String> optionaltype = Optional.of(nameProductType);
+
+        optionaltype.filter(ota-> ota.equals(TypeProduct.CreditCard.toString()))
+                .ifPresent(a-> {
+
+                    product.setBalance(product.getBalance().subtract(charge.getAmount()));
+                    productClient.updateProduct(product);
+                    chargeDao.save(charge);
+
+                });
 
     }
 

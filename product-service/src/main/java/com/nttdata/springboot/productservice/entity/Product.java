@@ -20,7 +20,11 @@ public class Product {
     private String numberProduct;
     private BigDecimal balance;
     private String state;
-    private Integer typeProductId;
+
+    @ManyToOne
+    @JoinColumn(name = "product_type_id", nullable = false)
+    private ProductType productType;
+
     private Integer clientId;
 
 

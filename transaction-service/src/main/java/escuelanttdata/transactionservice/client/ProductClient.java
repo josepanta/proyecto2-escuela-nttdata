@@ -1,6 +1,7 @@
 package escuelanttdata.transactionservice.client;
 
 import escuelanttdata.transactionservice.client.model.Product;
+import escuelanttdata.transactionservice.client.model.ProductType;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
