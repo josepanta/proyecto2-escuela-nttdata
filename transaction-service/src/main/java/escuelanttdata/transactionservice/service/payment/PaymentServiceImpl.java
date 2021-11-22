@@ -16,7 +16,14 @@ public class PaymentServiceImpl implements PaymentService{
     PaymentDao paymentDao;
 
 
-   @Override
+    @Override
+    public List<Payment> getAll() {
+        List<Payment> paymentList = new ArrayList<>();
+        paymentDao.findAll().forEach(payment -> paymentList.add(payment));
+        return  paymentList;
+    }
+
+    @Override
     public void save(Payment payment) {
         paymentDao.save(payment);
     }

@@ -13,7 +13,12 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
-  @PostMapping("/payment")
+    @GetMapping("/payment")
+    public List<Payment> getAll(){
+        return paymentService.getAll();
+    }
+
+    @PostMapping("/payment/save")
     public void savePayment(@RequestBody Payment payment){
         paymentService.save(payment);
     }

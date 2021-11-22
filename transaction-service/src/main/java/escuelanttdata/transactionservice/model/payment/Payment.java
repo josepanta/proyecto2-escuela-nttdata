@@ -24,14 +24,14 @@ public class Payment {
     private BigDecimal amount;
 
     @CreationTimestamp
-    @Column(name = "dateCreate")
+    @Column(name = "date_Create")
     private Date dateCreate;
 
     @CreationTimestamp
-    @Column(name = "dateUpdate")
+    @Column(name = "date_Update")
     private Date dateUpdate;
 
-    @Column(name = "productId")
+    @Column(name = "product_Id")
     private Integer productId;
 
 }

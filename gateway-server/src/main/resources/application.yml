@@ -7,7 +7,7 @@ spring:
           predicates:
             - Path=/api-transaction/**
             - Header=token
-            - Method=GET,POST
+            - Method=GET,POST,PUT,DELETE
           filters:
             - StripPrefix=1
 
