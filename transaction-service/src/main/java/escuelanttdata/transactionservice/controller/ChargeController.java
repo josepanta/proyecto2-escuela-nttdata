@@ -19,8 +19,8 @@ public class ChargeController {
         chargeService.save(charge);
     }
 
-    @GetMapping("/charge/account/{id}")
-    public List<Charge> getTransactionByAccountId(@PathVariable Integer id){
+    @GetMapping("/charge/product/{id}")
+    public List<Charge> getTransactionByProductId(@PathVariable Integer id){
         return chargeService.getChargeByProductId(id);
     }
 }

@@ -18,13 +18,13 @@ public class PaymentController {
         return paymentService.getAll();
     }
 
-    @PostMapping("/payment/save")
+    @PostMapping("/payment")
     public void savePayment(@RequestBody Payment payment){
         paymentService.save(payment);
     }
 
-    @GetMapping("/payment/account/{id}")
-    public List<Payment> getPaymentByAccountId(@PathVariable Integer id){
+    @GetMapping("/payment/product/{id}")
+    public List<Payment> getPaymentByProductId(@PathVariable Integer id){
         return paymentService.getPaymentByProductId(id);
     }
 
