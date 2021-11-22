@@ -1,9 +1,11 @@
 package com.nttdata.featureclientservice.model;
 
+import com.nttdata.featureclientservice.client.model.product.Transaction;
 import lombok.*;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +22,6 @@ public class Client {
     private String name;
     @Column(name="number_document")
     private String numberDocument;
+    @Transient
+    List<Transaction> transactionList;
 }
