@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: service-transaction
+
+  config.import: optional:configserver:http://localhost:8888
+
+
+management:
+  enpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8762/eureka/
+
+  instance:
+    hostname: localhost
+
