@@ -1,13 +1,16 @@
 package com.nttdata.featureclientservice.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "client")
 public class Client {
@@ -15,6 +18,6 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Column(name="number_document")
     private String numberDocument;
-
 }
