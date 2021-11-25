@@ -1,8 +1,8 @@
 package com.nttdata.springboot.productservice.utils.exceptions;
 
-public class NotFountException extends Exception {
+public class NotFoundException extends Exception {
 
-    public NotFountException(String message){
+    public NotFoundException(String message){
         super(message);
     }
 }

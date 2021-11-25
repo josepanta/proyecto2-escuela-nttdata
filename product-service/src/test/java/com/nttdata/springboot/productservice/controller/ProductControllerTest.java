@@ -2,12 +2,10 @@ package com.nttdata.springboot.productservice.controller;
 
 import com.nttdata.springboot.productservice.entity.Product;
 import com.nttdata.springboot.productservice.entity.ProductType;
-import com.nttdata.springboot.productservice.repository.ProductRepository;
 import com.nttdata.springboot.productservice.service.ProductServiceImpl;
-import com.nttdata.springboot.productservice.utils.exceptions.NotFountException;
+import com.nttdata.springboot.productservice.utils.exceptions.NotFoundException;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
-import io.reactivex.internal.operators.maybe.MaybeJust;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -69,7 +67,7 @@ class ProductControllerTest {
 
     @Test
     void test_getById_whenServiceReturnsNotFountError(){
-        Mockito.when(productService.getById(1)).thenReturn(Single.error(new NotFountException("not fount")));
+        Mockito.when(productService.getById(1)).thenReturn(Single.error(new NotFoundException("not fount")));
         productController.getById(1)
                 .test()
                 .assertComplete()

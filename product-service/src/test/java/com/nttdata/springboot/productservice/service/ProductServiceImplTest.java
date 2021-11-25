@@ -1,7 +1,7 @@
 package com.nttdata.springboot.productservice.service;
 
 import com.nttdata.springboot.productservice.repository.ProductRepository;
-import com.nttdata.springboot.productservice.utils.exceptions.NotFountException;
+import com.nttdata.springboot.productservice.utils.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,8 +29,8 @@ public class ProductServiceImplTest {
         productService.getById(1)
                 .test()
                 .assertNotComplete()
-                .assertError(NotFountException.class)
-                .assertError(error -> ((NotFountException)error).getMessage().equals("No se encontro el recurso"));
+                .assertError(NotFoundException.class)
+                .assertError(error -> ((NotFoundException)error).getMessage().equals("No se encontro el recurso"));
     }
 
 }

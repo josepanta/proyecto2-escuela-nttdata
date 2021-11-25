@@ -1,6 +1,7 @@
 package com.nttdata.springboot.productservice.service;
 
 import com.nttdata.springboot.productservice.entity.Product;
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -11,12 +12,12 @@ public interface ProductService {
 
     Single<Product> getById(Integer id);
 
-    void save(Product product);
+    Completable save(Product product);
 
-    void deleteById(Integer id);
+    Completable deleteById(Integer id);
 
-    void updateBalance(Product product);
+    Completable updateBalance(Product product);
 
-    List<Product> getProductByCLientId(Integer id);
+    Maybe<List<Product>> getProductByClientId(Integer id);
 
 }
