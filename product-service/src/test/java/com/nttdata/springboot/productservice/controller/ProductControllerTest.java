@@ -9,11 +9,14 @@ import io.reactivex.Single;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class ProductControllerTest {
 
@@ -35,11 +38,12 @@ class ProductControllerTest {
                 .test()
                 .assertComplete()
                 .assertNoErrors()
-                .assertValue(listResponseEntity -> listResponseEntity.getBody().size() == 1 && listResponseEntity.getStatusCode() == HttpStatus.OK);
+                .assertValue( listResponseEntity -> Stream.of(listResponseEntity.getBody()).collect(Collectors.toList()).size() == 1 && listResponseEntity.getStatusCode() == HttpStatus.OK);
     }
 
     private Maybe<List<Product>> buildListProducts() {
-        return Maybe.just(Arrays.asList(new Product(1, "123-456", new BigDecimal(550), "Active", new ProductType(), 1)));
+        return Maybe.just(Arrays.asList(new Product(1, "123-456", new BigDecimal(550), "Active", new ProductType(), 1),
+                new Product(1, "123-456", new BigDecimal(550), "Active", new ProductType(), 1)));
     }
 
     @Test

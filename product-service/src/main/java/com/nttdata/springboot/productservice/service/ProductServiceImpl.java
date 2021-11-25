@@ -3,6 +3,7 @@ package com.nttdata.springboot.productservice.service;
 import com.nttdata.springboot.productservice.entity.Product;
 import com.nttdata.springboot.productservice.repository.ProductRepository;
 import com.nttdata.springboot.productservice.utils.exceptions.NotFoundException;
+import com.nttdata.springboot.productservice.utils.exceptions.NotSavedException;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
@@ -22,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Maybe<List<Product>> getAll() {
 
-        return Maybe.fromCallable(() -> productRepository.findAll());
+        return Maybe.fromCallable(() -> Optional.of(productRepository.findAll()).orElseThrow(() -> new NotFoundException("DB Access fail")));
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Completable save(Product product) {
 
-        return Completable.fromCallable(() -> productRepository.save(product));
+        return Completable.fromCallable(() -> Optional.of(productRepository.save(product)).orElseThrow(()->new NotSavedException("Not Saved")));
     }
 
     @Override
@@ -52,14 +53,12 @@ public class ProductServiceImpl implements ProductService {
                     productOptional.setBalance(productOptional.getBalance());
                     return Completable.fromCallable(() -> productRepository.save(productOptional));
                 })
-                .orElse(Completable.error(new Exception("Error")));
+                .orElse(Completable.error(new NotSavedException("Not Saved")));
     }
 
     @Override
     public Maybe<List<Product>> getProductByClientId(Integer id) {
 
-        return Maybe.fromCallable(() -> productRepository.findAll().stream()
-                                            .filter(product -> product.getClientId()
-                                            .equals(id)).collect(Collectors.toList()));
+        return Maybe.fromCallable(() -> productRepository.findAll().stream().filter(product -> product.getClientId().equals(id)).collect(Collectors.toList()));
     }
 }
