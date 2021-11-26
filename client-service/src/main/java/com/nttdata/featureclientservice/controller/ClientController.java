@@ -54,7 +54,7 @@ public class ClientController {
                 .onErrorResumeNext(this::buildError);
     }
 
-    @DeleteMapping("deleteClient/{id}")
+    @DeleteMapping("/deleteClient/{id}")
     public Maybe<ResponseEntity<Object>> deletedClient(@PathVariable Integer idCLient){
         return clientServiceImpl.deletClient(idCLient)
                 .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) "Deleted client"))
