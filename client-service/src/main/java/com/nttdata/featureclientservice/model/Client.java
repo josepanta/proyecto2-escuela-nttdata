@@ -1,5 +1,6 @@
 package com.nttdata.featureclientservice.model;
 
+import com.nttdata.featureclientservice.client.model.product.Product;
 import com.nttdata.featureclientservice.client.model.product.Transaction;
 import lombok.*;
 
@@ -20,8 +21,10 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @Column(name="number_document")
+    @Column(name = "number_document")
     private String numberDocument;
     @Transient
-    List<Transaction> transactionList;
+    List<Transaction> transactions;
+    @Transient
+    List<Product> products;
 }

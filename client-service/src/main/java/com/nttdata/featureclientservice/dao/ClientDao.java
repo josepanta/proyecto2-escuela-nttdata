@@ -1,8 +1,8 @@
 package com.nttdata.featureclientservice.dao;
 
 import com.nttdata.featureclientservice.model.Client;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClientDao extends CrudRepository<Client,Integer> {
+public interface ClientDao extends JpaRepository<Client, Integer> {
 
 }
