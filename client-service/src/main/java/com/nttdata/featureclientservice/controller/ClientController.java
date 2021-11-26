@@ -47,17 +47,17 @@ public class ClientController {
     }
 
     @PostMapping("saveClient")
-    public Maybe<ResponseEntity<Object>> saveClient(@Valid @RequestBody Client client){
+    public Maybe<ResponseEntity<Object>> saveClient(@Valid @RequestBody Client client) {
         return clientServiceImpl.saveClient(client)
-                .toSingle(()-> ResponseEntity.status(HttpStatus.CREATED).body((Object) "Client created"))
+                .toSingle(() -> ResponseEntity.status(HttpStatus.CREATED).body((Object) "Client created"))
                 .toMaybe()
                 .onErrorResumeNext(this::buildError);
     }
 
-    @DeleteMapping("/deleteClient/{id}")
-    public Maybe<ResponseEntity<Object>> deletedClient(@PathVariable Integer idCLient){
-        return clientServiceImpl.deletClient(idCLient)
-                .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) "Deleted client"))
+    @DeleteMapping("/deleteClient/{idClient}")
+    public Maybe<ResponseEntity<Object>> deletedClient(@PathVariable Integer idClient) {
+        return clientServiceImpl.deletClient(idClient)
+                .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) "Client deleted"))
                 .toMaybe()
                 .onErrorResumeNext(this::buildError);
     }
