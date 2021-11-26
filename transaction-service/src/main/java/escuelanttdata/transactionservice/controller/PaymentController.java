@@ -2,9 +2,15 @@ package escuelanttdata.transactionservice.controller;
 
 import escuelanttdata.transactionservice.model.payment.Payment;
 import escuelanttdata.transactionservice.service.payment.PaymentService;
+import escuelanttdata.transactionservice.utils.exceptions.NotFountException;
+import io.reactivex.Maybe;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -19,13 +25,27 @@ public class PaymentController {
     }
 
     @PostMapping("/payment")
-    public void savePayment(@RequestBody Payment payment){
-        paymentService.save(payment);
+    public Maybe<ResponseEntity<Object>> savePayment(@Valid @RequestBody Payment payment){
+       return paymentService.save(payment)
+                .toMaybe()
+                .map(object ->ResponseEntity.status(HttpStatus.CREATED).body((Object) "Saved Charge"))
+                .onErrorResumeNext(this::buildError);
     }
 
     @GetMapping("/payment/product/{id}")
-    public List<Payment> getPaymentByProductId(@PathVariable Integer id){
-        return paymentService.getPaymentByProductId(id);
+    public Maybe<ResponseEntity<Object>> getPaymentByProductId(@Min(1) @PathVariable Integer id){
+        return paymentService.getPaymentByProductId(id)
+                .map(paymentList -> ResponseEntity.status(HttpStatus.OK).body((Object) paymentList))
+                .onErrorResumeNext(this::buildError);
+    }
+
+    private Maybe<ResponseEntity<Object>> buildError(Throwable error) {
+
+        if (error.getClass() == NotFountException.class)
+            return Maybe.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage()));
+        else if (error.getClass() == NotFountException.class)
+            return Maybe.just(ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error.getMessage()));
+        else return Maybe.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Error"));
     }
 
 }

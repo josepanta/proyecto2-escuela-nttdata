@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -20,6 +22,7 @@ public class Charge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     @Column(name = "amount")
     private BigDecimal amount;
 
@@ -31,9 +34,11 @@ public class Charge {
     @Column(name = "dateUpdate")
     private Date dateUpdate;
 
+    @NotEmpty
     @Column(name = "description")
     private String description;
 
+    @NotNull
     @Column(name = "productId")
     private Integer productId;
 

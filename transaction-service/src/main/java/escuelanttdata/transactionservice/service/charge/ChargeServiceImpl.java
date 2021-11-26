@@ -3,12 +3,15 @@ package escuelanttdata.transactionservice.service.charge;
 import escuelanttdata.transactionservice.client.ProductClient;
 import escuelanttdata.transactionservice.client.model.Product;
 import escuelanttdata.transactionservice.client.model.TypeProduct;
-import escuelanttdata.transactionservice.dao.ChargeDao;
 import escuelanttdata.transactionservice.model.charge.Charge;
+import escuelanttdata.transactionservice.repository.ChargeRepository;
+import escuelanttdata.transactionservice.utils.exceptions.NotFountException;
+import escuelanttdata.transactionservice.utils.exceptions.NotSavedException;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +21,10 @@ public class ChargeServiceImpl implements ChargeService {
     @Autowired
     ProductClient productClient;
     @Autowired
-    ChargeDao chargeDao;
+    ChargeRepository chargeRepository;
 
     @Override
-    public void save(Charge charge) {
+    public Completable save(Charge charge) {
 
         Product product;
         String nameProductType;
@@ -29,22 +32,18 @@ public class ChargeServiceImpl implements ChargeService {
         nameProductType = product.getProductType().getName();
 
         Optional<String> optionaltype = Optional.of(nameProductType);
-
         optionaltype.filter(ota -> ota.equals(TypeProduct.CreditCard.toString()))
                 .ifPresent(a -> {
-
                     product.setBalance(product.getBalance().subtract(charge.getAmount()));
                     productClient.updateProduct(product);
-                    chargeDao.save(charge);
-
+                    chargeRepository.save(charge);
                 });
 
+        return Completable.fromCallable(() -> Optional.of(optionaltype).orElseThrow(()->new NotSavedException("Not Saved")));
     }
 
     @Override
-    public List<Charge> getChargeByProductId(Integer id) {
-        List<Charge> chargeList = new ArrayList<>();
-        chargeDao.getChargeByProductId(id).forEach(charge -> chargeList.add(charge));
-        return chargeList;
+    public Maybe<Optional<List<Charge>>> getChargeByProductId(Integer id) {
+        return Maybe.fromCallable(() -> Optional.of(chargeRepository.getChargeByProductId(id).orElseThrow(() -> new NotFountException("Not Fount"))));
     }
 }

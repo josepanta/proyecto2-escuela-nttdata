@@ -9,7 +9,6 @@ import io.reactivex.Single;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
@@ -41,11 +40,6 @@ class ProductControllerTest {
                 .assertValue( listResponseEntity -> Stream.of(listResponseEntity.getBody()).collect(Collectors.toList()).size() == 1 && listResponseEntity.getStatusCode() == HttpStatus.OK);
     }
 
-    private Maybe<List<Product>> buildListProducts() {
-        return Maybe.just(Arrays.asList(new Product(1, "123-456", new BigDecimal(550), "Active", new ProductType(), 1),
-                new Product(1, "123-456", new BigDecimal(550), "Active", new ProductType(), 1)));
-    }
-
     @Test
     void test_getById_whenServiceRetursAProduct() {
         Mockito.when(productService.getById(ArgumentMatchers.anyInt())).thenReturn(buildProduct());
@@ -66,7 +60,6 @@ class ProductControllerTest {
                 .assertNoErrors()
                 .assertValue(responseEntity -> responseEntity.getStatusCode()==HttpStatus.INTERNAL_SERVER_ERROR
                 && ((String)responseEntity.getBody()).equals("Error Interno"));
-
     }
 
     @Test
@@ -80,9 +73,13 @@ class ProductControllerTest {
                 && responseEntity.getBody().equals("not fount"));
     }
 
+    private Maybe<List<Product>> buildListProducts() {
+        return Maybe.just(Arrays.asList(new Product(1, "123-456", new BigDecimal(550), "Active", new ProductType(), 1)));
+    }
 
     private Single<Product> buildProduct() {
         return  Single.just(new Product(1, "123-789", new BigDecimal(700), "Active", new ProductType(), 2));
     }
+
 
 }

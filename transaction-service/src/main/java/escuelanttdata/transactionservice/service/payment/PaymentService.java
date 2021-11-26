@@ -1,15 +1,17 @@
 package escuelanttdata.transactionservice.service.payment;
 
 import escuelanttdata.transactionservice.model.payment.Payment;
-import escuelanttdata.transactionservice.model.transaction.Transaction;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PaymentService {
 
    List<Payment> getAll();
 
-   void save(Payment payment);
+   Completable save(Payment payment);
 
-   List<Payment> getPaymentByProductId(Integer id);
+   Maybe<Optional<List<Payment>>> getPaymentByProductId(Integer id);
 }

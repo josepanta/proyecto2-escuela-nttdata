@@ -1,16 +1,19 @@
 package escuelanttdata.transactionservice.service.transaction;
 
-import escuelanttdata.transactionservice.client.model.Product;
 import escuelanttdata.transactionservice.client.ProductClient;
+import escuelanttdata.transactionservice.client.model.Product;
 import escuelanttdata.transactionservice.client.model.TypeProduct;
-import escuelanttdata.transactionservice.dao.TransactionDao;
 import escuelanttdata.transactionservice.model.transaction.Transaction;
 import escuelanttdata.transactionservice.model.transaction.TypeTransaction;
+import escuelanttdata.transactionservice.repository.TransactionRepository;
+import escuelanttdata.transactionservice.utils.exceptions.NotFountException;
+import escuelanttdata.transactionservice.utils.exceptions.NotSavedException;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +23,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     ProductClient productClient;
     @Autowired
-    TransactionDao transactionDao;
+    TransactionRepository transactionRepository;
 
     @Override
-    public void save(Transaction transaction) {
+    public Completable save(Transaction transaction) {
         String nameProductType;
         Product product;
         product = productClient.getById(transaction.getProductId());
@@ -33,7 +36,9 @@ public class TransactionServiceImpl implements TransactionService {
         Optional<BigDecimal> optionalBalance = Optional.of(product.getBalance());
         Optional<String> optionaltype = Optional.of(nameProductType);
 
-        optionaltype.filter(ota -> ota.equals(TypeProduct.savingAccount.toString()) || ota.equals(TypeProduct.currentAccount.toString()) || ota.equals(TypeProduct.FixedTermAccount.toString()))
+        optionaltype.filter(ota -> ota.equals(TypeProduct.savingAccount.toString())
+                        || ota.equals(TypeProduct.currentAccount.toString())
+                        || ota.equals(TypeProduct.FixedTermAccount.toString()))
                 .ifPresent(a -> {
 
                     optionalBalance.filter(o -> o.compareTo(BigDecimal.ZERO) > 0)
@@ -43,7 +48,7 @@ public class TransactionServiceImpl implements TransactionService {
                                         .ifPresent(b -> {
                                             product.setBalance(product.getBalance().subtract(transaction.getAmount()));
                                             productClient.updateProduct(product);
-                                            transactionDao.save(transaction);
+                                            transactionRepository.save(transaction);
                                         });
                             });
 
@@ -51,18 +56,16 @@ public class TransactionServiceImpl implements TransactionService {
                             .ifPresent(b -> {
                                 product.setBalance(product.getBalance().add(transaction.getAmount()));
                                 productClient.updateProduct(product);
-                                transactionDao.save(transaction);
+                                transactionRepository.save(transaction);
                             });
                 });
 
-
+        return Completable.fromCallable(() -> Optional.of(optionaltype).orElseThrow(()->new NotSavedException("Not Saved")));
     }
 
     @Override
-    public List<Transaction> getTransactionByProductId(Integer accoundId) {
-        List<Transaction> transactionList = new ArrayList<>();
-        transactionDao.findTransactionByProductId(accoundId).forEach(transaction -> transactionList.add(transaction));
-        return transactionList;
+    public Maybe<Optional<List<Transaction>>> getTransactionByProductId(Integer id) {
+        return Maybe.fromCallable(()->Optional.of(transactionRepository.getTransactionByProductId(id).orElseThrow(()->new NotFountException("Not Fount"))));
     }
 
 }

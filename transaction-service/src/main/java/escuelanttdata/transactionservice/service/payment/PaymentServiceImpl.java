@@ -3,8 +3,12 @@ package escuelanttdata.transactionservice.service.payment;
 import escuelanttdata.transactionservice.client.ProductClient;
 import escuelanttdata.transactionservice.client.model.Product;
 import escuelanttdata.transactionservice.client.model.TypeProduct;
-import escuelanttdata.transactionservice.dao.PaymentDao;
 import escuelanttdata.transactionservice.model.payment.Payment;
+import escuelanttdata.transactionservice.repository.PaymentRepository;
+import escuelanttdata.transactionservice.utils.exceptions.NotFountException;
+import escuelanttdata.transactionservice.utils.exceptions.NotSavedException;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +22,18 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     ProductClient productClient;
     @Autowired
-    PaymentDao paymentDao;
+    PaymentRepository paymentRepository;
 
 
     @Override
     public List<Payment> getAll() {
         List<Payment> paymentList = new ArrayList<>();
-        paymentDao.findAll().forEach(payment -> paymentList.add(payment));
+        paymentRepository.findAll().forEach(payment -> paymentList.add(payment));
         return paymentList;
     }
 
     @Override
-    public void save(Payment payment) {
+    public Completable save(Payment payment) {
         Product product;
         String nameProductType;
         product = productClient.getById(payment.getProductId());
@@ -41,16 +45,13 @@ public class PaymentServiceImpl implements PaymentService {
 
                     product.setBalance(product.getBalance().add(payment.getAmount()));
                     productClient.updateProduct(product);
-                    paymentDao.save(payment);
-
+                    paymentRepository.save(payment);
                 });
-
+        return Completable.fromCallable(() -> Optional.of(optionaltype).orElseThrow(()->new NotSavedException("Not Saved")));
     }
 
     @Override
-    public List<Payment> getPaymentByProductId(Integer id) {
-        List<Payment> paymentList = new ArrayList<>();
-        paymentDao.getPaymentByProductId(id).forEach(payment -> paymentList.add(payment));
-        return paymentList;
+    public Maybe<Optional<List<Payment>>> getPaymentByProductId(Integer id) {
+        return Maybe.fromCallable(() -> Optional.of(paymentRepository.getPaymentByProductId(id).orElseThrow(() -> new NotFountException("Not Fount"))));
     }
 }
