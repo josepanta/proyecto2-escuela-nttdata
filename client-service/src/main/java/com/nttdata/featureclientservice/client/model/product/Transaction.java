@@ -1,6 +1,6 @@
 package com.nttdata.featureclientservice.client.model.product;
 
-import com.sun.istack.NotNull;
+
 import lombok.*;
 
 import java.math.BigDecimal;

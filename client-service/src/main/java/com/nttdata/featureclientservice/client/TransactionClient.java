@@ -9,9 +9,8 @@ import java.util.List;
 
 @FeignClient(name = "service-transaction")
 public interface TransactionClient {
-        @GetMapping("/transaction/product/{id}")
-        List<Transaction> getTransactionByProductId(@PathVariable Integer id);
-
+    @GetMapping("/transaction/product/{id}")
+    List<Transaction> getTransactionByProductId(@PathVariable Integer id);
 
 
 }
