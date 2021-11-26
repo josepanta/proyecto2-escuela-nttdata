@@ -31,21 +31,6 @@ public class ClientController {
                 .onErrorResumeNext(this::buildError);
     }
 
-    @GetMapping("/clientProductById/{idClient}")
-    public List<Product> getClientClientById(@PathVariable Integer idClient) {
-        return clientServiceImpl.getProductAll(idClient);
-    }
-
-    @GetMapping("balanceById/{idClient}")
-    public BigDecimal getBalanceId(@PathVariable Integer idClient) {
-        return clientServiceImpl.getBalanceById(idClient).getBalance();
-    }
-
-    @GetMapping("/transaction/{id}")
-    public List<Transaction> getTransaccion(@PathVariable Integer id) {
-        return clientServiceImpl.getTransactionByClientId(id);
-    }
-
     @PostMapping("saveClient")
     public Maybe<ResponseEntity<Object>> saveClient(@Valid @RequestBody Client client) {
         return clientServiceImpl.saveClient(client)
@@ -61,6 +46,23 @@ public class ClientController {
                 .toMaybe()
                 .onErrorResumeNext(this::buildError);
     }
+
+    /* START SECTION USE FEIGN */
+    @GetMapping("/clientProductById/{idClient}")
+    public List<Product> getProductOfClient(@PathVariable Integer idClient) {
+        return clientServiceImpl.getProductAll(idClient);
+    }
+
+    @GetMapping("balanceById/{idClient}")
+    public BigDecimal getBalanceId(@PathVariable Integer idClient) {
+        return clientServiceImpl.getBalanceById(idClient).getBalance();
+    }
+
+    @GetMapping("/transaction/{id}")
+    public List<Transaction> getTransaccion(@PathVariable Integer id) {
+        return clientServiceImpl.getTransactionByClientId(id);
+    }
+    /* END SECTION USE FEIGN */
 
     private Maybe<ResponseEntity<Object>> buildError(Throwable error) {
 

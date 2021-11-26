@@ -18,6 +18,11 @@ import java.util.List;
 @Entity
 @Table(name = "client")
 public class Client {
+    public Client(Integer id,String name,String numberDocument){
+        this.setId(id);
+        this.setName(name);
+        this.setNumberDocument(numberDocument);
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
