@@ -9,10 +9,14 @@ import io.reactivex.Single;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -31,7 +35,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Maybe<ResponseEntity<Object>> getById(@PathVariable Integer id) {
+    public Maybe<ResponseEntity<Object>> getById(@Min(1) @PathVariable Integer id) {
 
         return productService.getById(id)
                 .map(product -> ResponseEntity.status(HttpStatus.OK).body((Object) product))
@@ -40,34 +44,34 @@ public class ProductController {
     }
 
     @PostMapping
-    public Maybe<ResponseEntity<Object>> save(@RequestBody Product product) {
+    public Maybe<ResponseEntity<Object>> save(@Valid @RequestBody Product product) {
 
         return productService.save(product)
-                .toSingle(() -> ResponseEntity.status(HttpStatus.CREATED).body((Object) product))
+                .toSingle(() -> ResponseEntity.status(HttpStatus.CREATED).body((Object) "Created Product"))
                 .onErrorResumeNext(this::buildError)
                 .toMaybe();
     }
 
     @DeleteMapping("/{id}")
-    public Maybe<ResponseEntity<Object>> delete(@PathVariable Integer id) {
+    public Maybe<ResponseEntity<Object>> delete(@Min(1) @PathVariable Integer id) {
 
         return productService.deleteById(id)
-                .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) id))
+                .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) "Deleted Product"))
                 .onErrorResumeNext(this::buildError)
                 .toMaybe();
     }
 
     @PutMapping
-    public Maybe<ResponseEntity<Object>> updateBalance(@RequestBody Product product) {
+    public Maybe<ResponseEntity<Object>> updateBalance(@Valid @RequestBody Product product) {
 
         return productService.save(product)
-                .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) product))
+                .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) "Updated Balance"))
                 .onErrorResumeNext(this::buildError)
                 .toMaybe();
     }
 
     @GetMapping("/client/{id}")
-    public Maybe<ResponseEntity<Object>> getProductByClientId(@PathVariable Integer id) {
+    public Maybe<ResponseEntity<Object>> getProductByClientId(@Min(1) @PathVariable Integer id) {
 
         return productService.getProductByClientId(id)
                 .map(products -> ResponseEntity.status(HttpStatus.OK).body((Object) products))
