@@ -46,7 +46,7 @@ public class RestrictionController {
     public Maybe<ResponseEntity<Object>> save(@Valid @RequestBody Restriction restriction) {
 
         return restrictionService.save(restriction)
-                .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) "Created Restriction"))
+                .toSingle(() -> ResponseEntity.status(HttpStatus.CREATED).body((Object) "Created Restriction"))
                 .onErrorResumeNext(this::buildError)
                 .toMaybe();
     }
@@ -55,7 +55,7 @@ public class RestrictionController {
     public Maybe<ResponseEntity<Object>> delete(@PathVariable @Min(1) Integer id) {
 
         return restrictionService.deleteById(id)
-                .toSingle(() -> ResponseEntity.status(HttpStatus.CREATED).body((Object) "Deleted Product"))
+                .toSingle(() -> ResponseEntity.status(HttpStatus.OK).body((Object) "Deleted Product"))
                 .onErrorResumeNext(this::buildError)
                 .toMaybe();
     }

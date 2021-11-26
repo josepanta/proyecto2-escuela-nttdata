@@ -1,8 +1,7 @@
 package com.nttdata.springboot.productservice.controller;
 
-import com.nttdata.springboot.productservice.entity.Product;
-import com.nttdata.springboot.productservice.entity.ProductType;
-import com.nttdata.springboot.productservice.service.ProductServiceImpl;
+import com.nttdata.springboot.productservice.entity.Restriction;
+import com.nttdata.springboot.productservice.service.RestrictionServiceImpl;
 import com.nttdata.springboot.productservice.utils.exceptions.NotFoundException;
 import com.nttdata.springboot.productservice.utils.exceptions.NotSavedException;
 import io.reactivex.Completable;
@@ -15,19 +14,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.http.HttpStatus;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-
-class ProductControllerTest {
-
+public class RestrictionControllerTest {
     @Mock
-    ProductServiceImpl productService;
+    RestrictionServiceImpl restrictionServiceImpl;
 
     @InjectMocks
-    ProductController productController;
+    RestrictionController restrictionController;
 
     @BeforeEach
     void setUp() {
@@ -45,9 +41,9 @@ class ProductControllerTest {
             @Test
             void test_getAll_whenServiceReturnsAListProducts() {
 
-                Mockito.when(productService.getAll())
-                        .thenReturn(buildListProducts());
-                productController.getAll()
+                Mockito.when(restrictionServiceImpl.getAll())
+                        .thenReturn(buildListRestrictions());
+                restrictionController.getAll()
                         .test()
                         .assertComplete()
                         .assertNoErrors()
@@ -60,9 +56,9 @@ class ProductControllerTest {
         class unHappyPath {
             @Test
             void test_getAll_whenServiceReturnNotFoundError() {
-                Mockito.when(productService.getAll())
+                Mockito.when(restrictionServiceImpl.getAll())
                         .thenReturn(Maybe.error(new Exception("Internal Error")));
-                productController.getAll()
+                restrictionController.getAll()
                         .test()
                         .assertComplete()
                         .assertNoErrors()
@@ -70,10 +66,10 @@ class ProductControllerTest {
             }
         }
 
-        private Maybe<List<Product>> buildListProducts() {
+        private Maybe<List<Restriction>> buildListRestrictions() {
 
-            return Maybe.just(Arrays.asList(new Product(1, "123-456", new BigDecimal(550), "Active", new ProductType(), 1),
-                    new Product(1, "123-456", new BigDecimal(550), "Active", new ProductType(), 1)));
+            return Maybe.just(Arrays.asList(new Restriction(1, "11000", "MaxCredit", "maximum amount of credit."),
+                    new Restriction(1, "true", "FreeCommission", "free commission for a account.")));
         }
     }
 
@@ -87,9 +83,9 @@ class ProductControllerTest {
 
             @Test
             void test_getById_whenServiceReturnsAProduct() {
-                Mockito.when(productService.getById(ArgumentMatchers.anyInt()))
-                        .thenReturn(buildProduct());
-                productController.getById(1)
+                Mockito.when(restrictionServiceImpl.getById(ArgumentMatchers.anyInt()))
+                        .thenReturn(buildRestriction());
+                restrictionController.getById(1)
                         .test()
                         .assertComplete()
                         .assertNoErrors()
@@ -104,9 +100,9 @@ class ProductControllerTest {
             @Test
             void test_getById_whenServiceReturnsErrorDB() {
 
-                Mockito.when(productService.getById(ArgumentMatchers.anyInt()))
+                Mockito.when(restrictionServiceImpl.getById(ArgumentMatchers.anyInt()))
                         .thenReturn(Single.error(new Exception("Internal Error")));
-                productController.getById(1)
+                restrictionController.getById(1)
                         .test()
                         .assertComplete()
                         .assertNoErrors()
@@ -117,9 +113,9 @@ class ProductControllerTest {
             @Test
             void test_getById_whenServiceReturnsNotFoundError() {
 
-                Mockito.when(productService.getById(1))
+                Mockito.when(restrictionServiceImpl.getById(1))
                         .thenReturn(Single.error(new NotFoundException("Not Found")));
-                productController.getById(1)
+                restrictionController.getById(1)
                         .test()
                         .assertComplete()
                         .assertNoErrors()
@@ -127,9 +123,9 @@ class ProductControllerTest {
             }
         }
 
-        private Single<Product> buildProduct() {
+        private Single<Restriction> buildRestriction() {
 
-            return Single.just(new Product(1, "123-789", new BigDecimal(700), "Active", new ProductType(), 2));
+            return Single.just(new Restriction(1, "11000", "MaxCredit", "maximum amount of credit."));
         }
     }
 
@@ -143,8 +139,8 @@ class ProductControllerTest {
 
             @Test
             void test_save_whenServiceSaveProduct() {
-                Mockito.when(productService.save(new Product())).thenReturn(buildProduct());
-                productController.save(new Product())
+                Mockito.when(restrictionServiceImpl.save(new Restriction())).thenReturn(buildRestriction());
+                restrictionController.save(new Restriction())
                         .test()
                         .assertComplete()
                         .assertNoErrors()
@@ -157,9 +153,9 @@ class ProductControllerTest {
         class unHappyPath {
             @Test
             void test_save_whenServiceReturnNotSaved(){
-                Mockito.when(productService.save(new Product()))
+                Mockito.when(restrictionServiceImpl.save(new Restriction()))
                         .thenReturn(Completable.error(new NotSavedException("Not Saved")));
-                productController.save(new Product())
+                restrictionController.save(new Restriction())
                         .test()
                         .assertComplete()
                         .assertNoErrors()
@@ -167,9 +163,9 @@ class ProductControllerTest {
             }
         }
 
-        private Completable buildProduct() {
+        private Completable buildRestriction() {
 
-            return Completable.fromCallable(() -> new Product(1, "123-789", new BigDecimal(700), "Active", new ProductType(), 2));
+            return Completable.fromCallable(() -> new Restriction(1, "11000", "MaxCredit", "maximum amount of credit."));
         }
     }
 
@@ -183,9 +179,9 @@ class ProductControllerTest {
 
             @Test
             void test_delete_whenServiceDelete(){
-                Mockito.when(productService.deleteById(ArgumentMatchers.anyInt()))
+                Mockito.when(restrictionServiceImpl.deleteById(ArgumentMatchers.anyInt()))
                         .thenReturn(Completable.fromCallable(Optional::empty));
-                productController.delete(ArgumentMatchers.anyInt())
+                restrictionController.delete(ArgumentMatchers.anyInt())
                         .test()
                         .assertComplete()
                         .assertNoErrors()
@@ -198,9 +194,9 @@ class ProductControllerTest {
         class unHappyPath {
             @Test
             void test_delete_whenServiceNotDelete(){
-                Mockito.when(productService.deleteById(ArgumentMatchers.anyInt()))
+                Mockito.when(restrictionServiceImpl.deleteById(ArgumentMatchers.anyInt()))
                         .thenReturn(Completable.error(new NotFoundException("Not Found")));
-                productController.delete(ArgumentMatchers.anyInt())
+                restrictionController.delete(ArgumentMatchers.anyInt())
                         .test()
                         .assertComplete()
                         .assertNoErrors()
