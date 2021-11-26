@@ -1,16 +1,19 @@
 package com.nttdata.springboot.productservice.service;
 
 import com.nttdata.springboot.productservice.entity.Restriction;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 import java.util.List;
 
 public interface RestrictionService {
 
-    public List<Restriction> getAll();
+    public Maybe<List<Restriction>> getAll();
 
-    public Restriction getById(Integer id);
+    public Single<Restriction> getById(Integer id);
 
-    public void save(Restriction restriction);
+    public Completable save(Restriction restriction);
 
-    public void deleteById(Integer id);
+    public Completable deleteById(Integer id);
 }

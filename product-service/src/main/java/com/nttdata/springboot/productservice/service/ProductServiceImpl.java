@@ -35,14 +35,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Completable save(Product product) {
 
-        return Completable.fromCallable(() -> Optional.of(productRepository.save(product)).orElseThrow(()->new NotSavedException("Not Saved")));
+        return Completable.fromCallable(() -> Optional.of(productRepository.save(product)).orElseThrow(() -> new NotSavedException("Not Saved")));
     }
 
     @Override
     public Completable deleteById(Integer id) {
 
-        productRepository.deleteById(id);
-        return Completable.fromCallable(Optional::empty);
+        return Completable.fromCallable(() -> productRepository.findById(id).map(product -> {
+            productRepository.deleteById(id);
+            return Optional.empty();
+        }).orElseThrow(() -> new NotFoundException("Not Found")));
     }
 
     @Override
