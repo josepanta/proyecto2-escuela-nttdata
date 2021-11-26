@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Completable save(Product product) {
 
-        return Completable.fromCallable(() -> Optional.of(productRepository.save(product)).orElseThrow(()->new NotSavedException("Not Saved")));
+        return Completable.fromCallable(() -> Optional.of(productRepository.save(product)).orElseThrow(() -> new NotSavedException("Not Saved")));
     }
 
     @Override

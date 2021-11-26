@@ -1,16 +1,19 @@
 package com.nttdata.springboot.productservice.service;
 
 import com.nttdata.springboot.productservice.entity.ProductType;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 
 import java.util.List;
 
 public interface ProductTypeService {
 
-    public List<ProductType> getAll();
+    public Maybe<List<ProductType>> getAll();
 
-    public ProductType getById(Integer id);
+    public Single<ProductType> getById(Integer id);
 
-    public void save(ProductType productType);
+    public Completable save(ProductType productType);
 
-    public void deleteById(Integer id);
+    public Completable deleteById(Integer id);
 }
