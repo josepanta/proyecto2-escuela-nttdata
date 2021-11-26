@@ -41,8 +41,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Completable deleteById(Integer id) {
 
-        productRepository.deleteById(id);
-        return Completable.fromCallable(Optional::empty);
+        return Completable.fromCallable(() -> productRepository.findById(id).map(product -> {
+            productRepository.deleteById(id);
+            return Optional.empty();
+        }).orElseThrow(() -> new NotFoundException("Not Found")));
     }
 
     @Override

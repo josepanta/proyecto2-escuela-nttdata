@@ -40,7 +40,9 @@ public class RestrictionServiceImpl implements RestrictionService {
     @Override
     public Completable deleteById(Integer id) {
 
-        restrictionRepository.deleteById(id);
-        return Completable.fromCallable(Optional::empty);
+        return Completable.fromCallable(() -> restrictionRepository.findById(id).map(product -> {
+            restrictionRepository.deleteById(id);
+            return Optional.empty();
+        }).orElseThrow(() -> new NotFoundException("Not Found")));
     }
 }

@@ -41,6 +41,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     public Completable deleteById(Integer id) {
 
         productTypeRepository.deleteById(id);
-        return Completable.fromCallable(Optional::empty);
+        return Completable.fromCallable(() -> productTypeRepository.findById(id).map(productType -> {
+            productTypeRepository.deleteById(id);
+            return Optional.empty();
+        }).orElseThrow(() -> new NotFoundException("Not Found")));
     }
 }

@@ -21,8 +21,7 @@ public class Product {
     private Integer id;
 
     @NotEmpty
-    @Min(11)
-    @Max(11)
+    @Size(min = 11, max = 11)
     private String numberProduct;
 
     @NotNull
