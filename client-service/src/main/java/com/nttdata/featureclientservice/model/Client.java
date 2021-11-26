@@ -6,6 +6,7 @@ import lombok.*;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Getter
@@ -20,7 +21,9 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotEmpty
     private String name;
+    @NotEmpty
     @Column(name = "number_document")
     private String numberDocument;
     @Transient

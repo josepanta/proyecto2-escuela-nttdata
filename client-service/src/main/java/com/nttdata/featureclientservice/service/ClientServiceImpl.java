@@ -4,9 +4,11 @@ import com.nttdata.featureclientservice.client.ProductClient;
 import com.nttdata.featureclientservice.client.TransactionClient;
 import com.nttdata.featureclientservice.client.model.product.Product;
 import com.nttdata.featureclientservice.client.model.product.Transaction;
-import com.nttdata.featureclientservice.dao.ClientDao;
+import com.nttdata.featureclientservice.repository.ClientRepository;
 import com.nttdata.featureclientservice.model.Client;
 import com.nttdata.featureclientservice.utils.exceptions.NotFoundException;
+import com.nttdata.featureclientservice.utils.exceptions.NotSavedException;
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 @Qualifier("clientService")
 public class ClientServiceImpl implements ClientService {
     @Autowired
-    ClientDao clientDao;
+    ClientRepository clientRepository;
 
     @Autowired
     TransactionClient transactionClient;
@@ -34,7 +36,7 @@ public class ClientServiceImpl implements ClientService {
     public Maybe<List<Client>> getAll() {
 
         return Maybe.fromCallable(() -> Optional.of(
-                        clientDao.findAll().stream()
+                        clientRepository.findAll().stream()
                                 .map(this::addProductToClient)
                                 .collect(Collectors.toList()).
                                 stream().
@@ -44,9 +46,19 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public String saveClient(Client client) {
-        clientDao.save(client);
-        return "Insertado correctamente";
+    public Completable saveClient(Client client) {
+
+        return Completable.fromCallable(() -> Optional.of(clientRepository.save(client)).orElseThrow(() -> new NotSavedException("Not Saved")));
+
+    }
+
+    @Override
+    public Completable deletClient(Integer idClient) {
+
+        return Completable.fromCallable(() -> clientRepository.findById(idClient).map(client -> {
+            clientRepository.deleteById(idClient);
+            return Optional.empty();
+        }).orElseThrow(() -> new NotFoundException("Not Found")));
     }
 
     @Override

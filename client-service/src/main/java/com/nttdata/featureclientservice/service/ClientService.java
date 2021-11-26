@@ -3,18 +3,21 @@ package com.nttdata.featureclientservice.service;
 import com.nttdata.featureclientservice.client.model.product.Product;
 import com.nttdata.featureclientservice.client.model.product.Transaction;
 import com.nttdata.featureclientservice.model.Client;
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 
 import java.util.List;
 
 public interface ClientService {
-    public Maybe<List<Client>> getAll();
+    Maybe<List<Client>> getAll();
 
-    public String saveClient(Client client);
+    Completable saveClient(Client client);
 
-    public List<Product> getProductAll(Integer idClient);
+    Completable deletClient(Integer idClient);
 
-    public List<Transaction> getTransactionByClientId(Integer idClient);
+    List<Product> getProductAll(Integer idClient);
 
-    public Product getBalanceById(Integer id);
+    List<Transaction> getTransactionByClientId(Integer idClient);
+
+    Product getBalanceById(Integer id);
 }
