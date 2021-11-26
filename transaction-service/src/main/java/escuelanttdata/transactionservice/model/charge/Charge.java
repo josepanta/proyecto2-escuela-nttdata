@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ public class Charge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Digits(integer = 30, fraction = 5)
     @NotNull
     @Column(name = "amount")
     private BigDecimal amount;

@@ -1,10 +1,15 @@
 package escuelanttdata.transactionservice.controller;
 
+import escuelanttdata.transactionservice.model.payment.Payment;
 import escuelanttdata.transactionservice.model.transaction.Transaction;
 import escuelanttdata.transactionservice.service.transaction.TransactionServiceImpl;
 import escuelanttdata.transactionservice.utils.exceptions.NotFountException;
+import escuelanttdata.transactionservice.utils.exceptions.NotSavedException;
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,7 +40,7 @@ public class TransactionControllerTest {
 
     @Test
     void test_getAll_whenServiceReturnsAListProducts() {
-        Mockito.when(transactionServiceImpl.getTransactionByProductId(1)).thenReturn(buildListCharges());
+        Mockito.when(transactionServiceImpl.getTransactionByProductId(1)).thenReturn(buildListTransactions());
         transactionController.getTransactionByAccountId(1)
                 .test()
                 .assertComplete()
@@ -55,7 +60,54 @@ public class TransactionControllerTest {
                         && ((String) responseEntity.getBody()).equals("Not Fount"));
     }
 
-    private Maybe<Optional<List<Transaction>>> buildListCharges() {
+    @Nested
+    @DisplayName("Method: save")
+    class save {
+
+        @Nested
+        @DisplayName("Happy Path")
+        class happyPath {
+
+            @Test
+            void test_save_whenServiceSavePayment() {
+                Mockito.when(transactionServiceImpl.save(new Transaction())).thenReturn(buildTransaction());
+                transactionController.saveTransaction(new Transaction())
+                        .test()
+                        .assertComplete()
+                        .assertNoErrors()
+                        .assertValue(objectResponseEntity -> objectResponseEntity.getStatusCode() == HttpStatus.CREATED);
+            }
+
+        }
+
+        @Nested
+        @DisplayName("UnHappy Path")
+        class unHappyPath {
+
+            @Test
+            void test_save_whenServiceReturnNotPayment(){
+                Mockito.when(transactionServiceImpl.save(new Transaction()))
+                        .thenReturn(Completable.error(new NotSavedException("Not Saved")));
+                transactionController.saveTransaction(new Transaction())
+                        .test()
+                        .assertComplete()
+                        .assertNoErrors()
+                        .assertValue(responseEntity -> responseEntity.getStatusCode() == HttpStatus.NOT_ACCEPTABLE);
+            }
+
+        }
+
+        private Completable buildTransaction() {
+
+            return Completable.fromCallable(() -> new Payment(1, new BigDecimal(550), new Date(), new Date(), 1));
+        }
+    }
+
+
+
+
+
+    private Maybe<Optional<List<Transaction>>> buildListTransactions() {
         return Maybe.just(Optional.of(Arrays.asList(new Transaction(1, new BigDecimal(550), "DEPOSIT", new Date(), 1))));
     }
 }

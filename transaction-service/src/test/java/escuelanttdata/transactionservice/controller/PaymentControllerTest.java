@@ -3,8 +3,12 @@ package escuelanttdata.transactionservice.controller;
 import escuelanttdata.transactionservice.model.payment.Payment;
 import escuelanttdata.transactionservice.service.payment.PaymentServiceImpl;
 import escuelanttdata.transactionservice.utils.exceptions.NotFountException;
+import escuelanttdata.transactionservice.utils.exceptions.NotSavedException;
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -58,5 +62,49 @@ public class PaymentControllerTest {
     private Maybe<Optional<List<Payment>>> buildListCharges() {
         return Maybe.just(Optional.of(Arrays.asList(new Payment(1, new BigDecimal(550), new Date(), new Date(), 1))));
     }
+
+    @Nested
+    @DisplayName("Method: save")
+    class save {
+
+        @Nested
+        @DisplayName("Happy Path")
+        class happyPath {
+
+            @Test
+            void test_save_whenServiceSavePayment() {
+                Mockito.when(paymentServiceImpl.save(new Payment())).thenReturn(buildCharge());
+                paymentController.savePayment(new Payment())
+                        .test()
+                        .assertComplete()
+                        .assertNoErrors()
+                        .assertValue(objectResponseEntity -> objectResponseEntity.getStatusCode() == HttpStatus.CREATED);
+            }
+
+        }
+
+        @Nested
+        @DisplayName("UnHappy Path")
+        class unHappyPath {
+
+            @Test
+            void test_save_whenServiceReturnNotPayment() {
+                Mockito.when(paymentServiceImpl.save(new Payment()))
+                        .thenReturn(Completable.error(new NotSavedException("Not Saved")));
+                paymentController.savePayment(new Payment())
+                        .test()
+                        .assertComplete()
+                        .assertNoErrors()
+                        .assertValue(responseEntity -> responseEntity.getStatusCode() == HttpStatus.NOT_ACCEPTABLE);
+            }
+
+        }
+
+        private Completable buildCharge() {
+
+            return Completable.fromCallable(() -> new Payment(1, new BigDecimal(550), new Date(), new Date(), 1));
+        }
+    }
+
 
 }
